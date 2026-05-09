@@ -1,0 +1,1297 @@
+/* ============================================
+   校园失物招领系统 - 高端时尚设计
+   灵感来源: Apple, Airbnb, Stripe
+   ============================================ */
+
+/* CSS 变量 */
+:root {
+    --primary: #6366f1;
+    --primary-dark: #4f46e5;
+    --primary-light: #818cf8;
+    --secondary: #0ea5e9;
+    --success: #10b981;
+    --danger: #ef4444;
+    --warning: #f59e0b;
+    --dark: #0f172a;
+    --gray-900: #1e293b;
+    --gray-800: #334155;
+    --gray-700: #475569;
+    --gray-600: #64748b;
+    --gray-500: #94a3b8;
+    --gray-400: #cbd5e1;
+    --gray-300: #e2e8f0;
+    --gray-200: #f1f5f9;
+    --gray-100: #f8fafc;
+    --white: #ffffff;
+    --gradient-primary: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
+    --gradient-hero: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-md: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    --shadow-xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+    --radius-sm: 8px;
+    --radius: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 24px;
+    --radius-full: 9999px;
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 全局重置 */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    background: var(--gray-100);
+    color: var(--gray-800);
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+main {
+    flex: 1;
+}
+
+/* ============================================
+   导航栏 - 毛玻璃效果
+   ============================================ */
+.navbar {
+    background: rgba(15, 23, 42, 0.95) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 1rem 0;
+    transition: var(--transition);
+}
+
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.4rem;
+    letter-spacing: -0.5px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.navbar-brand i {
+    font-size: 1.6rem;
+    color: var(--white);
+}
+
+.nav-link {
+    font-weight: 500;
+    font-size: 0.95rem;
+    padding: 0.6rem 1.2rem !important;
+    border-radius: 0;
+    transition: var(--transition);
+    color: var(--gray-400) !important;
+    position: relative;
+}
+
+.nav-link:hover {
+    color: var(--white) !important;
+    background: transparent;
+}
+
+.nav-link.active {
+    color: var(--white) !important;
+    background: transparent !important;
+}
+
+.nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 24px;
+    height: 3px;
+    background: var(--white);
+    border-radius: 3px;
+}
+
+.navbar .btn-outline-light {
+    border: 1.5px solid rgba(255, 255, 255, 0.3);
+    border-radius: var(--radius-full);
+    padding: 0.5rem 1.5rem;
+    font-weight: 600;
+    transition: var(--transition);
+}
+
+.navbar .btn-outline-light:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.navbar .btn-light {
+    background: var(--white);
+    color: var(--dark);
+    border-radius: var(--radius-full);
+    padding: 0.5rem 1.5rem;
+    font-weight: 600;
+    border: none;
+    transition: var(--transition);
+}
+
+.navbar .btn-light:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+/* ============================================
+   首页 Hero 区域
+   ============================================ */
+.search-card {
+    background: var(--white);
+    border: none;
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+}
+
+.search-card .card-body {
+    padding: 2.5rem;
+}
+
+.search-card h4 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.search-card h4 i {
+    width: 48px;
+    height: 48px;
+    background: var(--gradient-primary);
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--white);
+    font-size: 1.2rem;
+}
+
+.search-card .input-group {
+    background: var(--gray-100);
+    border-radius: var(--radius-lg);
+    padding: 6px;
+    gap: 8px;
+}
+
+.search-card .form-control {
+    border: none;
+    background: transparent;
+    padding: 14px 20px;
+    font-size: 1rem;
+    border-radius: var(--radius) !important;
+}
+
+.search-card .form-control:focus {
+    box-shadow: none;
+    background: var(--white);
+}
+
+.search-card .form-select {
+    border: none;
+    background: var(--white);
+    padding: 14px 20px;
+    font-size: 0.95rem;
+    border-radius: var(--radius) !important;
+    cursor: pointer;
+}
+
+.search-card .btn-primary {
+    padding: 14px 32px;
+    border-radius: var(--radius) !important;
+    font-weight: 600;
+    background: var(--gradient-primary);
+    border: none;
+    white-space: nowrap;
+}
+
+/* 发布卡片 */
+.post-card {
+    background: var(--gradient-hero) !important;
+    border: none;
+    border-radius: var(--radius-xl);
+    position: relative;
+    overflow: hidden;
+}
+
+.post-card::before {
+    content: '';
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.3) 0%, transparent 70%);
+    top: -100px;
+    right: -100px;
+}
+
+.post-card::after {
+    content: '';
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(168, 85, 247, 0.2) 0%, transparent 70%);
+    bottom: -50px;
+    left: -50px;
+}
+
+.post-card .card-body {
+    position: relative;
+    z-index: 1;
+    padding: 2.5rem 2rem;
+}
+
+.post-card h5 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+}
+
+.post-card .btn {
+    border-radius: var(--radius-full);
+    padding: 12px 24px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: var(--transition);
+    border: none;
+}
+
+.post-card .btn-light {
+    background: var(--white);
+    color: var(--dark);
+}
+
+.post-card .btn-light:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+}
+
+.post-card .btn-success {
+    background: var(--success);
+    color: var(--white);
+}
+
+.post-card .btn-success:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(16, 185, 129, 0.4);
+}
+
+/* ============================================
+   列表区域标题
+   ============================================ */
+h3, h4 {
+    color: var(--dark);
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+h3 {
+    font-size: 1.75rem;
+    margin-bottom: 1.5rem;
+}
+
+h4 {
+    font-size: 1.25rem;
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+h4 i {
+    font-size: 1.1rem;
+}
+
+/* ============================================
+   列表项 - 简约风格
+   ============================================ */
+.list-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.list-group-item {
+    border: none;
+    border-radius: var(--radius-lg) !important;
+    padding: 1.25rem 1.5rem;
+    background: var(--white);
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+    margin-bottom: 0;
+}
+
+.list-group-item:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.list-group-item h6 {
+    font-weight: 600;
+    color: var(--dark);
+    font-size: 1rem;
+}
+
+.list-group-item p {
+    color: var(--gray-600);
+    font-size: 0.9rem;
+    margin: 0.5rem 0;
+}
+
+.list-group-item small {
+    color: var(--gray-500);
+    font-size: 0.85rem;
+}
+
+.type-lost {
+    border-left: 4px solid var(--danger) !important;
+}
+
+.type-found {
+    border-left: 4px solid var(--success) !important;
+}
+
+/* ============================================
+   物品卡片 - 现代设计
+   ============================================ */
+.item-card {
+    margin-bottom: 24px;
+}
+
+.item-card .card {
+    border: none;
+    border-radius: var(--radius-xl);
+    background: var(--white);
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+    overflow: hidden;
+    height: 100%;
+}
+
+.item-card .card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-xl);
+}
+
+/* 卡片图片占位区域 */
+.card-img-placeholder {
+    height: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.card-img-placeholder.lost {
+    background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+}
+
+.card-img-placeholder.found {
+    background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+}
+
+.card-img-placeholder i {
+    font-size: 3rem;
+    opacity: 0.6;
+    transition: var(--transition);
+}
+
+.card-img-placeholder.lost i {
+    color: var(--danger);
+}
+
+.card-img-placeholder.found i {
+    color: var(--success);
+}
+
+.item-card .card:hover .card-img-placeholder i {
+    transform: scale(1.1);
+    opacity: 0.8;
+}
+
+.item-card .badge {
+    display: inline-block;
+    padding: 6px 14px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: var(--radius-full);
+    margin-bottom: 12px;
+}
+
+.item-card .card-body {
+    padding: 1.25rem;
+}
+
+.item-card .card-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.item-card .card-text {
+    color: var(--gray-600);
+    font-size: 0.85rem;
+    line-height: 1.5;
+    margin-bottom: 0;
+}
+
+.text-truncate-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+    min-height: 2.5em;
+}
+
+.item-card .card-footer {
+    background: transparent;
+    border-top: 1px solid var(--gray-200);
+    padding: 0.875rem 1.25rem;
+}
+
+/* ============================================
+   徽章样式
+   ============================================ */
+.badge {
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: var(--radius-full);
+    font-size: 0.8rem;
+    letter-spacing: 0.3px;
+}
+
+.bg-danger {
+    background: rgba(239, 68, 68, 0.9) !important;
+}
+
+.bg-success {
+    background: rgba(16, 185, 129, 0.9) !important;
+}
+
+.bg-warning {
+    background: rgba(245, 158, 11, 0.9) !important;
+    color: var(--white) !important;
+}
+
+.bg-info {
+    background: rgba(14, 165, 233, 0.9) !important;
+}
+
+.bg-primary {
+    background: var(--primary) !important;
+}
+
+/* ============================================
+   按钮系统
+   ============================================ */
+.btn {
+    border-radius: var(--radius);
+    font-weight: 600;
+    padding: 12px 24px;
+    font-size: 0.95rem;
+    transition: var(--transition);
+    border: none;
+}
+
+.btn-primary {
+    background: var(--gradient-primary);
+    color: var(--white);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+}
+
+.btn-success {
+    background: var(--success);
+    color: var(--white);
+}
+
+.btn-success:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(16, 185, 129, 0.4);
+}
+
+.btn-danger {
+    background: var(--danger);
+    color: var(--white);
+}
+
+.btn-danger:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(239, 68, 68, 0.4);
+}
+
+.btn-outline-primary {
+    background: transparent;
+    border: 2px solid var(--primary);
+    color: var(--primary);
+}
+
+.btn-outline-primary:hover {
+    background: var(--primary);
+    color: var(--white);
+    transform: translateY(-2px);
+}
+
+.btn-outline-danger {
+    background: transparent;
+    border: 2px solid var(--danger);
+    color: var(--danger);
+}
+
+.btn-outline-danger:hover {
+    background: var(--danger);
+    color: var(--white);
+}
+
+.btn-secondary {
+    background: var(--gray-200);
+    color: var(--gray-700);
+}
+
+.btn-secondary:hover {
+    background: var(--gray-300);
+    color: var(--gray-800);
+}
+
+.btn-sm {
+    padding: 8px 16px;
+    font-size: 0.85rem;
+}
+
+/* ============================================
+   卡片通用样式
+   ============================================ */
+.card {
+    border: none;
+    border-radius: var(--radius-xl);
+    background: var(--white);
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+    overflow: hidden;
+    margin-bottom: 24px;
+}
+
+.card:hover {
+    box-shadow: var(--shadow-lg);
+}
+
+.card-header {
+    background: var(--gray-100);
+    border-bottom: 1px solid var(--gray-200);
+    padding: 1.25rem 1.5rem;
+    font-weight: 700;
+    color: var(--dark);
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+/* ============================================
+   表单样式
+   ============================================ */
+.form-control,
+.form-select {
+    border: 2px solid var(--gray-300);
+    border-radius: var(--radius);
+    padding: 14px 18px;
+    font-size: 1rem;
+    transition: var(--transition);
+    background: var(--white);
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+    outline: none;
+}
+
+.form-control::placeholder {
+    color: var(--gray-500);
+}
+
+.form-label {
+    font-weight: 600;
+    color: var(--gray-700);
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+}
+
+/* ============================================
+   弹窗样式 - 高端设计
+   ============================================ */
+.modal-content {
+    border: none;
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-xl);
+    overflow: hidden;
+}
+
+.modal-header {
+    background: var(--gradient-hero);
+    color: var(--white);
+    padding: 2rem;
+    border: none;
+    position: relative;
+}
+
+.modal-header::before {
+    content: '';
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.3) 0%, transparent 70%);
+    top: -80px;
+    right: -80px;
+}
+
+.modal-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    position: relative;
+    z-index: 1;
+}
+
+.modal-header .btn-close {
+    filter: brightness(0) invert(1);
+    opacity: 0.8;
+    position: relative;
+    z-index: 1;
+}
+
+.modal-header .btn-close:hover {
+    opacity: 1;
+}
+
+.modal-body {
+    padding: 2rem;
+}
+
+.modal-body .form-control,
+.modal-body .form-select {
+    border-radius: var(--radius);
+    padding: 14px 18px;
+}
+
+.modal-body .btn-primary {
+    width: 100%;
+    padding: 16px;
+    font-size: 1.05rem;
+    margin-top: 0.5rem;
+}
+
+.modal-footer {
+    border-top: 1px solid var(--gray-200);
+    padding: 1.25rem 2rem;
+}
+
+/* ============================================
+   分页样式
+   ============================================ */
+.pagination {
+    gap: 8px;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.pagination .page-link {
+    border: none;
+    border-radius: var(--radius);
+    padding: 12px 18px;
+    color: var(--gray-700);
+    font-weight: 600;
+    background: var(--white);
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+}
+
+.pagination .page-link:hover {
+    background: var(--primary);
+    color: var(--white);
+    transform: translateY(-2px);
+}
+
+.pagination .page-item.active .page-link {
+    background: var(--gradient-primary);
+    color: var(--white);
+}
+
+.pagination .page-item.disabled .page-link {
+    background: var(--gray-200);
+    color: var(--gray-500);
+}
+
+/* ============================================
+   消息样式
+   ============================================ */
+.message-unread {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(168, 85, 247, 0.05) 100%) !important;
+    border-left: 4px solid var(--primary) !important;
+}
+
+/* ============================================
+   下拉菜单
+   ============================================ */
+.dropdown-menu {
+    border: none;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    padding: 8px;
+    min-width: 200px;
+}
+
+.dropdown-item {
+    border-radius: var(--radius);
+    padding: 12px 16px;
+    font-weight: 500;
+    color: var(--gray-700);
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.dropdown-item:hover {
+    background: var(--gray-100);
+    color: var(--primary);
+}
+
+.dropdown-item i {
+    font-size: 1.1rem;
+    width: 20px;
+}
+
+.dropdown-divider {
+    margin: 8px 0;
+    border-color: var(--gray-200);
+}
+
+/* ============================================
+   Tab 导航
+   ============================================ */
+.nav-tabs {
+    border: none;
+    gap: 8px;
+    background: var(--gray-100);
+    padding: 6px;
+    border-radius: var(--radius-lg);
+    display: inline-flex;
+}
+
+.nav-tabs .nav-link {
+    border: none;
+    border-radius: var(--radius);
+    padding: 10px 20px;
+    font-weight: 600;
+    color: var(--gray-600);
+    transition: var(--transition);
+}
+
+.nav-tabs .nav-link:hover {
+    color: var(--primary);
+    background: var(--white);
+}
+
+.nav-tabs .nav-link.active {
+    background: var(--white) !important;
+    color: var(--primary) !important;
+    box-shadow: var(--shadow-sm);
+}
+
+/* ============================================
+   页脚
+   ============================================ */
+footer {
+    background: var(--gradient-hero) !important;
+    padding: 3rem 0 !important;
+    margin-top: auto;
+}
+
+footer p {
+    color: var(--gray-500);
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+/* ============================================
+   Toast 提示
+   ============================================ */
+.toast {
+    border: none;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xl);
+}
+
+.toast-header {
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    padding: 1rem;
+    font-weight: 600;
+}
+
+.toast-body {
+    padding: 1rem;
+}
+
+/* ============================================
+   响应式设计
+   ============================================ */
+@media (max-width: 992px) {
+    .search-card .input-group {
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    .search-card .form-control,
+    .search-card .form-select,
+    .search-card .btn {
+        width: 100%;
+        border-radius: var(--radius) !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar-brand {
+        font-size: 1.2rem;
+    }
+    
+    .search-card .card-body,
+    .post-card .card-body {
+        padding: 1.5rem;
+    }
+    
+    .post-card .d-flex {
+        flex-direction: column;
+    }
+    
+    .post-card .btn {
+        width: 100%;
+    }
+    
+    h3 {
+        font-size: 1.5rem;
+    }
+    
+    .modal-header {
+        padding: 1.5rem;
+    }
+    
+    .modal-body {
+        padding: 1.5rem;
+    }
+}
+
+/* ============================================
+   动画效果
+   ============================================ */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.item-card {
+    animation: fadeInUp 0.6s ease forwards;
+    opacity: 0;
+}
+
+.item-card:nth-child(1) { animation-delay: 0.1s; }
+.item-card:nth-child(2) { animation-delay: 0.15s; }
+.item-card:nth-child(3) { animation-delay: 0.2s; }
+.item-card:nth-child(4) { animation-delay: 0.25s; }
+.item-card:nth-child(5) { animation-delay: 0.3s; }
+.item-card:nth-child(6) { animation-delay: 0.35s; }
+
+.list-group-item {
+    animation: fadeInUp 0.5s ease forwards;
+    opacity: 0;
+}
+
+.list-group-item:nth-child(1) { animation-delay: 0.1s; }
+.list-group-item:nth-child(2) { animation-delay: 0.15s; }
+.list-group-item:nth-child(3) { animation-delay: 0.2s; }
+.list-group-item:nth-child(4) { animation-delay: 0.25s; }
+.list-group-item:nth-child(5) { animation-delay: 0.3s; }
+
+/* ============================================
+   滚动条美化
+   ============================================ */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--gray-200);
+    border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--gray-400);
+    border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--gray-500);
+}
+
+/* ============================================
+   选中文本样式
+   ============================================ */
+::selection {
+    background: rgba(99, 102, 241, 0.2);
+    color: var(--dark);
+}
+
+
+/* ============================================
+   增强响应式设计
+   ============================================ */
+
+/* 超小屏幕 (手机竖屏) */
+@media (max-width: 576px) {
+    .navbar-brand {
+        font-size: 1rem;
+    }
+    
+    .navbar-brand i {
+        font-size: 1.2rem;
+    }
+    
+    .search-card .card-body,
+    .post-card .card-body {
+        padding: 1.25rem;
+    }
+    
+    .search-card h4 {
+        font-size: 1.2rem;
+    }
+    
+    .search-card h4 i {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+    
+    .post-card h5 {
+        font-size: 1.1rem;
+    }
+    
+    .post-card .btn {
+        padding: 10px 18px;
+        font-size: 0.85rem;
+    }
+    
+    h3 {
+        font-size: 1.3rem;
+    }
+    
+    h4 {
+        font-size: 1.1rem;
+    }
+    
+    .item-card .card-body {
+        padding: 1rem;
+    }
+    
+    .item-card .card-title {
+        font-size: 1rem;
+    }
+    
+    .item-card .card-text {
+        font-size: 0.85rem;
+    }
+    
+    .modal-header {
+        padding: 1.25rem;
+    }
+    
+    .modal-body {
+        padding: 1.25rem;
+    }
+    
+    .modal-title {
+        font-size: 1.2rem;
+    }
+    
+    .form-control,
+    .form-select {
+        padding: 12px 14px;
+        font-size: 0.95rem;
+    }
+    
+    .btn {
+        padding: 10px 18px;
+        font-size: 0.9rem;
+    }
+    
+    .btn-sm {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+    }
+    
+    .list-group-item {
+        padding: 1rem;
+    }
+    
+    .list-group-item h6 {
+        font-size: 0.95rem;
+    }
+    
+    .badge {
+        padding: 5px 10px;
+        font-size: 0.75rem;
+    }
+    
+    .pagination .page-link {
+        padding: 8px 12px;
+        font-size: 0.85rem;
+    }
+    
+    /* 首页搜索区域 */
+    .search-card .input-group {
+        padding: 4px;
+    }
+    
+    .search-card .form-control,
+    .search-card .form-select {
+        padding: 12px 14px;
+    }
+    
+    .search-card .btn-primary {
+        padding: 12px 20px;
+    }
+    
+    /* 物品详情页 */
+    #itemDetail .card-header h4 {
+        font-size: 1.1rem;
+    }
+    
+    #itemDetail .card-body p {
+        font-size: 0.9rem;
+    }
+    
+    /* 个人中心 */
+    #profilePage .card {
+        margin-bottom: 1rem;
+    }
+    
+    /* 消息列表 */
+    .message-unread {
+        border-left-width: 3px !important;
+    }
+    
+    /* 页脚 */
+    footer {
+        padding: 2rem 0 !important;
+    }
+    
+    footer .navbar-brand {
+        font-size: 1rem;
+    }
+}
+
+/* 小屏幕 (手机横屏/小平板) */
+@media (min-width: 577px) and (max-width: 767px) {
+    .search-card .card-body {
+        padding: 1.5rem;
+    }
+    
+    .post-card .card-body {
+        padding: 1.5rem;
+    }
+    
+    .item-card .card-body {
+        padding: 1.25rem;
+    }
+    
+    h3 {
+        font-size: 1.5rem;
+    }
+}
+
+/* 中等屏幕 (平板) */
+@media (min-width: 768px) and (max-width: 991px) {
+    .navbar .btn-outline-light,
+    .navbar .btn-light {
+        padding: 0.4rem 1rem;
+        font-size: 0.9rem;
+    }
+    
+    .search-card .card-body {
+        padding: 2rem;
+    }
+    
+    .post-card .card-body {
+        padding: 2rem 1.5rem;
+    }
+    
+    .item-card .card-title {
+        font-size: 1rem;
+    }
+}
+
+/* 触摸设备优化 */
+@media (hover: none) and (pointer: coarse) {
+    .btn {
+        min-height: 44px;
+    }
+    
+    .nav-link {
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+    }
+    
+    .list-group-item {
+        min-height: 60px;
+    }
+    
+    .pagination .page-link {
+        min-width: 44px;
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .form-control,
+    .form-select {
+        min-height: 48px;
+    }
+    
+    /* 禁用hover效果在触摸设备上 */
+    .item-card .card:hover {
+        transform: none;
+    }
+    
+    .list-group-item:hover {
+        transform: none;
+    }
+    
+    .btn:hover {
+        transform: none;
+    }
+}
+
+/* 高分辨率屏幕 */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .navbar {
+        border-bottom-width: 0.5px;
+    }
+    
+    .card {
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+}
+
+/* 横屏模式优化 */
+@media (orientation: landscape) and (max-height: 500px) {
+    .modal-dialog {
+        margin: 0.5rem auto;
+    }
+    
+    .modal-body {
+        max-height: 60vh;
+        overflow-y: auto;
+    }
+    
+    .login-container {
+        padding: 1rem;
+    }
+}
+
+/* 打印样式 */
+@media print {
+    .navbar,
+    .btn,
+    .pagination,
+    footer,
+    .toast-container {
+        display: none !important;
+    }
+    
+    .card {
+        box-shadow: none;
+        border: 1px solid #ddd;
+    }
+    
+    body {
+        background: white;
+    }
+}
+
+/* 深色模式支持 (可选) */
+@media (prefers-color-scheme: dark) {
+    /* 如需支持深色模式，可在此添加样式 */
+}
+
+/* 减少动画偏好 */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    
+    .item-card,
+    .list-group-item {
+        animation: none;
+        opacity: 1;
+    }
+}
+
+
+/* 智能匹配推荐卡片 */
+.similar-card {
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.similar-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+}

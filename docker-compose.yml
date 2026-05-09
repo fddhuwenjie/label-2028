@@ -1,0 +1,69 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    platform: linux/amd64
+    container_name: lostfound-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: lost_found
+      MYSQL_USER: lostfound
+      MYSQL_PASSWORD: lostfound123
+      TZ: Asia/Shanghai
+    ports:
+      - "3028:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./Backend/src/main/resources/schema.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --default-authentication-plugin=mysql_native_password
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot123"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile
+    container_name: lostfound-backend
+    restart: always
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_PORT: 3306
+      MYSQL_DATABASE: lost_found
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root123
+      TZ: Asia/Shanghai
+    ports:
+      - "8028:8080"
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  frontend-user:
+    build:
+      context: ./Frontend/frontend-user
+      dockerfile: Dockerfile
+    container_name: lostfound-frontend
+    restart: always
+    ports:
+      - "8081:80"
+    depends_on:
+      - backend
+
+  frontend-admin:
+    build:
+      context: ./Frontend/frontend-admin
+      dockerfile: Dockerfile
+    container_name: lostfound-admin
+    restart: always
+    ports:
+      - "8082:80"
+    depends_on:
+      - backend
+
+volumes:
+  mysql_data:

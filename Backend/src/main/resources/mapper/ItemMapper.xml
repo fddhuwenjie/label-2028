@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.campus.lostfound.mapper.ItemMapper">
+
+    <select id="findPage" resultType="com.campus.lostfound.entity.Item">
+        SELECT i.*, u.username FROM item i 
+        LEFT JOIN user u ON i.user_id = u.id 
+        WHERE 1=1
+        <if test="type != null">
+            AND i.type = #{type}
+        </if>
+        <if test="status != null">
+            AND i.status = #{status}
+        </if>
+        <if test="category != null and category != ''">
+            AND i.category = #{category}
+        </if>
+        <if test="keyword != null and keyword != ''">
+            AND (i.title LIKE CONCAT('%',#{keyword},'%') OR i.description LIKE CONCAT('%',#{keyword},'%') OR i.location LIKE CONCAT('%',#{keyword},'%'))
+        </if>
+        <if test="userId != null">
+            AND i.user_id = #{userId}
+        </if>
+        ORDER BY i.create_time DESC
+        LIMIT #{offset}, #{size}
+    </select>
+
+    <select id="count" resultType="java.lang.Long">
+        SELECT COUNT(*) FROM item i WHERE 1=1
+        <if test="type != null">
+            AND i.type = #{type}
+        </if>
+        <if test="status != null">
+            AND i.status = #{status}
+        </if>
+        <if test="category != null and category != ''">
+            AND i.category = #{category}
+        </if>
+        <if test="keyword != null and keyword != ''">
+            AND (i.title LIKE CONCAT('%',#{keyword},'%') OR i.description LIKE CONCAT('%',#{keyword},'%') OR i.location LIKE CONCAT('%',#{keyword},'%'))
+        </if>
+        <if test="userId != null">
+            AND i.user_id = #{userId}
+        </if>
+    </select>
+
+    <!-- 智能匹配：根据分类、地点、时间计算匹配分数 -->
+    <select id="findMatches" resultType="com.campus.lostfound.entity.Item">
+        SELECT i.*, u.username,
+            (
+                CASE WHEN i.category = #{category} THEN 50 ELSE 0 END +
+                CASE WHEN i.location LIKE CONCAT('%', #{location}, '%') OR #{location} LIKE CONCAT('%', i.location, '%') THEN 30 ELSE 0 END +
+                CASE WHEN ABS(DATEDIFF(i.create_time, #{createTime})) &lt;= 7 THEN 20 - ABS(DATEDIFF(i.create_time, #{createTime})) * 2 ELSE 0 END
+            ) AS match_score
+        FROM item i
+        LEFT JOIN user u ON i.user_id = u.id
+        WHERE i.type = #{matchType}
+          AND i.status = 1
+          AND i.id != #{excludeId}
+        HAVING match_score > 0
+        ORDER BY match_score DESC, i.create_time DESC
+        LIMIT #{limit}
+    </select>
+
+</mapper>

@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理后台 - 校园失物招领系统</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="css/admin.css" rel="stylesheet">
+</head>
+<body>
+    <!-- 登录页面 -->
+    <div id="loginPage" class="login-container">
+        <!-- 背景装饰圆 -->
+        <div class="login-bg-circle"></div>
+        <div class="login-bg-circle"></div>
+        <div class="login-bg-circle"></div>
+        
+        <div class="card login-card">
+            <div class="card-body">
+                <h3 class="text-center mb-4"><i class="bi bi-shield-lock"></i> 管理员登录</h3>
+                <form id="loginForm">
+                    <div class="mb-3">
+                        <label class="form-label">用户名</label>
+                        <input type="text" id="username" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">密码</label>
+                        <input type="password" id="password" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">登录</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 管理页面 -->
+    <div id="adminPage" class="d-none">
+        <!-- 侧边栏 - 深色通顶 -->
+        <nav class="col-md-2 d-md-block sidebar">
+            <div class="sidebar-brand">
+                <i class="bi bi-gear-fill"></i> 管理后台
+            </div>
+            <div class="position-sticky">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#" onclick="showSection('dashboard')">
+                            <i class="bi bi-speedometer2"></i> 数据统计
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showSection('items')">
+                            <i class="bi bi-box"></i> 物品管理
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showSection('users')">
+                            <i class="bi bi-people"></i> 用户管理
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- 顶部导航 -->
+        <nav class="navbar">
+            <div class="container-fluid">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0" id="breadcrumb">
+                        <li class="breadcrumb-item"><i class="bi bi-house-door"></i> 首页</li>
+                        <li class="breadcrumb-item active" id="breadcrumbCurrent">数据统计</li>
+                    </ol>
+                </nav>
+                <div class="d-flex align-items-center">
+                    <span class="text-light me-3">欢迎，<span id="adminName"></span></span>
+                    <button class="btn btn-outline-light btn-sm" onclick="logout()">
+                        <i class="bi bi-box-arrow-right"></i> 退出
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <div class="main-wrapper">
+            <!-- 主内容区 -->
+            <main class="px-md-4 py-3">
+                    <!-- 数据统计 -->
+                    <div id="dashboardSection">
+                        <!-- 统计卡片 -->
+                        <div class="row g-4">
+                            <div class="col-md-6 col-lg-3">
+                                <div class="stat-card stat-card-primary">
+                                    <div class="stat-icon">
+                                        <i class="bi bi-people-fill"></i>
+                                    </div>
+                                    <div class="stat-content">
+                                        <div class="stat-value" id="statUsers">0</div>
+                                        <div class="stat-label">用户总数</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-3">
+                                <div class="stat-card stat-card-danger">
+                                    <div class="stat-icon">
+                                        <i class="bi bi-search"></i>
+                                    </div>
+                                    <div class="stat-content">
+                                        <div class="stat-value" id="statLost">0</div>
+                                        <div class="stat-label">失物数量</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-3">
+                                <div class="stat-card stat-card-success">
+                                    <div class="stat-icon">
+                                        <i class="bi bi-hand-thumbs-up-fill"></i>
+                                    </div>
+                                    <div class="stat-content">
+                                        <div class="stat-value" id="statFound">0</div>
+                                        <div class="stat-label">招领数量</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-3">
+                                <div class="stat-card stat-card-warning">
+                                    <div class="stat-icon">
+                                        <i class="bi bi-clock-history"></i>
+                                    </div>
+                                    <div class="stat-content">
+                                        <div class="stat-value" id="statPending">0</div>
+                                        <div class="stat-label">待审核</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 图表区域 -->
+                        <div class="row g-4 mt-2 align-items-stretch">
+                            <div class="col-lg-8 d-flex">
+                                <div class="dashboard-card flex-fill">
+                                    <div class="dashboard-card-header">
+                                        <h5><i class="bi bi-bar-chart-fill"></i> 分类统计</h5>
+                                    </div>
+                                    <div class="dashboard-card-body">
+                                        <div id="categoryStats"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 d-flex">
+                                <div class="dashboard-card flex-fill">
+                                    <div class="dashboard-card-header">
+                                        <h5><i class="bi bi-pie-chart-fill"></i> 状态分布</h5>
+                                    </div>
+                                    <div class="dashboard-card-body">
+                                        <div id="statusStats">
+                                            <div class="status-item">
+                                                <span class="status-dot bg-warning"></span>
+                                                <span class="status-name">待审核</span>
+                                                <span class="status-count" id="statusPending">0</span>
+                                            </div>
+                                            <div class="status-item">
+                                                <span class="status-dot bg-success"></span>
+                                                <span class="status-name">已通过</span>
+                                                <span class="status-count" id="statusApproved">0</span>
+                                            </div>
+                                            <div class="status-item">
+                                                <span class="status-dot bg-danger"></span>
+                                                <span class="status-name">已拒绝</span>
+                                                <span class="status-count" id="statusRejected">0</span>
+                                            </div>
+                                            <div class="status-item">
+                                                <span class="status-dot bg-info"></span>
+                                                <span class="status-name">已认领</span>
+                                                <span class="status-count" id="statusClaimed">0</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 物品管理 -->
+                    <div id="itemsSection" class="d-none">
+                        <h2>物品管理</h2>
+                        <div class="row mb-3 mt-3 align-items-center">
+                            <div class="col">
+                                <select id="filterType" class="form-select" onchange="loadItems()">
+                                    <option value="">全部类型</option>
+                                    <option value="0">失物</option>
+                                    <option value="1">招领</option>
+                                </select>
+                            </div>
+                            <div class="col">
+                                <select id="filterStatus" class="form-select" onchange="loadItems()">
+                                    <option value="">全部状态</option>
+                                    <option value="0">待审核</option>
+                                    <option value="1">已通过</option>
+                                    <option value="2">已拒绝</option>
+                                    <option value="3">已认领</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <input type="text" id="filterKeyword" class="form-control" placeholder="搜索..." onkeyup="if(event.key==='Enter')loadItems()">
+                            </div>
+                            <div class="col-auto">
+                                <button class="btn btn-primary" onclick="loadItems()">搜索</button>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>标题</th>
+                                        <th>类型</th>
+                                        <th>分类</th>
+                                        <th>发布者</th>
+                                        <th>状态</th>
+                                        <th>发布时间</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="itemsTable"></tbody>
+                            </table>
+                        </div>
+                        <nav id="itemsPagination"></nav>
+                    </div>
+
+                    <!-- 用户管理 -->
+                    <div id="usersSection" class="d-none">
+                        <h2>用户管理</h2>
+                        <div class="row mb-3 mt-3 align-items-center">
+                            <div class="col-md-4">
+                                <input type="text" id="userKeyword" class="form-control" placeholder="搜索用户名或姓名..." onkeyup="if(event.key==='Enter')loadUsers()">
+                            </div>
+                            <div class="col-auto">
+                                <button class="btn btn-primary" onclick="loadUsers()">搜索</button>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>用户名</th>
+                                        <th>真实姓名</th>
+                                        <th>手机号</th>
+                                        <th>学号</th>
+                                        <th>角色</th>
+                                        <th>状态</th>
+                                        <th>注册时间</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="usersTable"></tbody>
+                            </table>
+                        </div>
+                        <nav id="usersPagination"></nav>
+                    </div>
+                </main>
+        </div>
+    </div>
+
+    <!-- 确认弹窗 -->
+    <div class="modal fade" id="confirmModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="bi bi-exclamation-triangle text-warning"></i> 确认操作</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="confirmMessage">确定要执行此操作吗？</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-danger" onclick="confirmAction()">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/toast.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+</html>
